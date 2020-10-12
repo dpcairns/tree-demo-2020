@@ -57,13 +57,8 @@ function setupQuestion() {
 
     const correctIndex = Math.floor(Math.random() * 2);
     
-    let incorrectIndex = 0;
-
-    if (correctIndex === 0) {
-        incorrectIndex = 1;
-    } else {
-        incorrectIndex = 0;
-    }
+    // ternery
+    const incorrectIndex = correctIndex === 1 ? 0 : 1;
     
     // go and set the DOM elements for the correct and incorrect tree
     correctName.textContent = correctTree.name;
