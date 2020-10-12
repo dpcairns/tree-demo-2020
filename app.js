@@ -10,6 +10,7 @@ const nextDiv = document.querySelector('#next');
 
 let guessesTaken = 0;
 const remainingTrees = rawTreeData.slice();
+const missedTrees = [];
 
 function getRandomTree(someArray) {
     const index = Math.floor(Math.random() * someArray.length);
@@ -17,6 +18,13 @@ function getRandomTree(someArray) {
     return someArray[index];
 }
 
+function removeById(someId) {
+    for (let i = 0; i < remainingTrees.length; i++) {
+        if (someId === remainingTrees[i]) {
+            remainingTrees.splice(i, 1);
+        }    
+    }
+}
 // go grab a cononical correct tree
 const correctTree = getRandomTree(remainingTrees);
 // go grab an incorrect tree from the rawTrees
@@ -40,6 +48,7 @@ radios[1].value = incorrectTree.id;
 images[1].src = incorrectTree.image;
 
 
+
 // set event listeners to update state and DOM
 for (let i = 0; i < radios.length; i++) {
     radios[i].addEventListener('change', (e) => 
@@ -55,9 +64,18 @@ for (let i = 0; i < radios.length; i++) {
         const theySelectedTheRightTree = e.target.value === correctTree.id;
 
         console.log(theySelectedTheRightTree);
-        
-        if (theySelectedTheRightTree) {
 
+        if (theySelectedTheRightTree) {
+            // remove tree from remainingTrees
+            removeById(e.target.value);
+
+            // display "correct!"
+            rightOrWrong.textContent = 'correct!!';
+        } else {
+            missedTrees.push(e.target.value);
+
+            // display "wrong!"
+            rightOrWrong.textContent = 'wrong!!';
         }
         
     });
