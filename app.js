@@ -29,36 +29,49 @@ function removeById(someId) {
 }
 
 function setupQuestion() {
+    // first, check if we're all out of trees
     if (remainingTrees.length === 0) {
         alert('done!');
     }
-
+    
+    // hide the next button
     nextDiv.classList.add('hidden');
 
+    // and reset the input styles
     for (let i = 0; i < radios.length; i++) {
         radios[i].disabled = false;
         radios[i].checked = false;
         images[i].style.opacity = 1;
-    } 
+    }
 
-// go grab a cononical correct tree
+    // go grab a cononical correct tree
     const correctTree = getRandomTree(remainingTrees);
-// go grab an incorrect tree from the rawTrees
+    // go grab an incorrect tree from the rawTrees
     let incorrectTree = getRandomTree(rawTreeData);
 
-// now, in the event that the two trees are the same
+    // now, in the event that the two trees are the same
     while (correctTree.id === incorrectTree.id) {
-    // go grab another incorrectTree UNTIL they are not the same
+        // go grab another incorrectTree UNTIL they are not the same
         incorrectTree = getRandomTree(rawTreeData);
     }
 
+    const correctIndex = Math.floor(Math.random() * 2);
+    
+    let incorrectIndex = 0;
 
+    if (correctIndex === 0) {
+        incorrectIndex = 1;
+    } else {
+        incorrectIndex = 0;
+    }
+    
+    // go and set the DOM elements for the correct and incorrect tree
     correctName.textContent = correctTree.name;
-    radios[0].value = correctTree.id;
-    images[0].src = correctTree.image;
+    radios[correctIndex].value = correctTree.id;
+    images[correctIndex].src = correctTree.image;
 
-    radios[1].value = incorrectTree.id;
-    images[1].src = incorrectTree.image;
+    radios[incorrectIndex].value = incorrectTree.id;
+    images[incorrectIndex].src = incorrectTree.image;
 
 
 
