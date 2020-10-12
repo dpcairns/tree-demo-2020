@@ -32,6 +32,19 @@ body {
     display: none;
 }
 
+label > img {
+    width: 200px;
+    height: 200px;
+}
+
+label > input {
+    display: none;
+}
+
+:checked + img {
+    border: solid 10px lightskyblue;
+}   
+
 main {
     display: flex;
     flex-direction: column;
