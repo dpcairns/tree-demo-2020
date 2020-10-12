@@ -10,6 +10,7 @@ const images = document.querySelectorAll('label > img');
 
 // initialize state
 
+let correctTree;
 let guessesTaken = 0;
 const remainingTrees = rawTreeData.slice();
 const missedTrees = [];
@@ -31,7 +32,7 @@ function removeById(someId) {
 function setupQuestion() {
     // first, check if we're all out of trees
     if (remainingTrees.length === 0) {
-        alert('done!');
+        alert(`it took you: ${guessesTaken} tries to get all ${rawTreeData.length} trees right. \n And here are the ones you missed: ${[...new Set(missedTrees)]}`);
     }
     
     // hide the next button
@@ -45,7 +46,7 @@ function setupQuestion() {
     }
 
     // go grab a cononical correct tree
-    const correctTree = getRandomTree(remainingTrees);
+    correctTree = getRandomTree(remainingTrees);
     // go grab an incorrect tree from the rawTrees
     let incorrectTree = getRandomTree(rawTreeData);
 
@@ -56,9 +57,8 @@ function setupQuestion() {
     }
 
     const correctIndex = Math.floor(Math.random() * 2);
-    
     // ternery
-    const incorrectIndex = correctIndex === 1 ? 0 : 1;
+    const incorrectIndex = correctIndex ? 0 : 1;
     
     // go and set the DOM elements for the correct and incorrect tree
     correctName.textContent = correctTree.name;
@@ -67,42 +67,39 @@ function setupQuestion() {
 
     radios[incorrectIndex].value = incorrectTree.id;
     images[incorrectIndex].src = incorrectTree.image;
-
-
-
-// set event listeners to update state and DOM
-    for (let i = 0; i < radios.length; i++) {
-        radios[i].addEventListener('change', (e) => 
-        {
-            guessesTaken++;
-            nextDiv.classList.remove('hidden');
-            
-            for (let i = 0; i < radios.length; i++) {
-                radios[i].disabled = true;
-                images[i].style.opacity = .5;
-            } 
-
-            const theySelectedTheRightTree = e.target.value === correctTree.id;
-
-            console.log(theySelectedTheRightTree);
-
-            if (theySelectedTheRightTree) {
-            // remove tree from remainingTrees
-                removeById(e.target.value);
-
-            // display "correct!"
-                rightOrWrong.textContent = 'correct!!';
-            } else {
-                missedTrees.push(e.target.value);
-
-            // display "wrong!"
-                rightOrWrong.textContent = 'wrong!!';
-            }
-        
-        });
-    }
 }
 
+// set event listeners to update state and DOM
+for (let i = 0; i < radios.length; i++) {
+    radios[i].addEventListener('change', (e) => 
+    {
+        guessesTaken++;
+        nextDiv.classList.remove('hidden');
+        
+        for (let i = 0; i < radios.length; i++) {
+            radios[i].disabled = true;
+            images[i].style.opacity = .5;
+        } 
+
+        const theySelectedTheRightTree = e.target.value === correctTree.id;
+
+        console.log(theySelectedTheRightTree);
+
+        if (theySelectedTheRightTree) {
+        // remove tree from remainingTrees
+            removeById(e.target.value);
+
+        // display "correct!"
+            rightOrWrong.textContent = 'correct!!';
+        } else {
+            missedTrees.push(e.target.value);
+
+        // display "wrong!"
+            rightOrWrong.textContent = 'wrong!!';
+        }
+    
+    });
+}
 
 setupQuestion();
 
